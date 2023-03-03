@@ -1,7 +1,7 @@
-import Hello from '~/components/Hello';
+import WheelChecker from '~/components/WheelChecker';
 
 function App() {
-  return <Hello />;
+  return <WheelChecker />;
 }
 
 export default App;
