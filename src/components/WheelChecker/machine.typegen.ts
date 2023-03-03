@@ -26,13 +26,14 @@ export interface Typegen0 {
     leftSpinChecked: 'stop' | 'xstate.stop';
     onWheelCheckFinish: '';
     rightSpinChecked: 'stop' | 'xstate.stop';
+    setWheelColor: 'done.invoke.getWheelColor';
   };
   eventsCausingDelays: {};
   eventsCausingGuards: {
     spinsCorrectly: '';
   };
   eventsCausingServices: {
-    getWheelColor: 'newWheel' | 'xstate.init';
+    getWheelColor: 'requestNewWheel' | 'xstate.init';
   };
   matchesStates:
     | 'done'
