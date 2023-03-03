@@ -1,44 +1,53 @@
 import { createMachine, assign } from 'xstate';
 
-const initialContext = {
-  wheelColor: '',
-  checkedRightSpin: false,
-  checkedLeftSpin: false,
-};
 export const wheelCheckerMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHcAWYwBsDC6DGA1mAE4B0AlhJmAMRoaYCCADs2AIbEDaADALqJQzAPaxyAF3LCAdoJAAPRAEYALAHZSalTx4AmHmoCsSgJyGAzEt0AaEAE9EKi6V1m9KgBxqlH3QDZdAF9A23osXDBCElIZAHFiYQBXaQgaZkTxABVhTLhxXgEkEBExSRk5RQRjP1I-Dx0Lbx4TcyNbBwQlQxNakx0lAx4-Qw9zOuDQ9HD8IjIZXNhxGnE8gDFyaXJYdAgCuRKJKVkiyura+p5GgZa2+0RdQw0-c37DPxMlK1U-CZAwnBm0XmeVIi3YdhoYOI4gAyswNgAZMAAM3y-H2okO5RO9z0mm0egMxjMlhsdwQL10pHMBNMun8BhUQRCfymAMisxi0gW4lB4nBkP50LhGwASuQoKg0YUhJiysdQJV9FStDp9EZTBYrO1cUpSEz+jTdGo1DTzB5fv8IlE5tyQbB4dIkajBcJmHsigd5RV7moeNSjHpdB4Qz4xjqEA89SH+s9-H0VOZLWzrZzgYtQY7xZKlos3R7ZaUjj7I36A4YgyGPGG-BGuv6TH5+pdg28VE5gizpMIIHA5FbAcQMUXsYrEABaXQqCOTlTJhip6KUajDrEKhSOMkdJzmTQXB6eXRKE2m+fTDlA6TxJIpVfenEIPx+PWfHRqd48JmNkwRhm1etKM8PCqKeLIDheto8nexYPlOEbPPqFwGMegEvB4PxgSmg5cjyfLgtBo4bggahbsoAT6iY+ifH4TJOE2hhnuyNo4fajrOuIBHrpUYy7gMOhjAE1ytIYv5NvqKhPqMIYCWojGLpBrFihKUqcSWPGkHxPACUezTCXW3SkIY-h+Go9QeBYxpdHJ2EQDIYCqQ+TIRuYlGkEh9JWEZ7aqJ2gRAA */
-    predictableActionArguments: true,
-    tsTypes: {} as import('./machine.typegen').Typegen0,
-    schema: {} as {
-      services: {
-        getWheelColor: {
-          data: string;
-        };
-      };
-    },
-    id: 'wheelChecker',
+    id: 'wheelMachine',
     initial: 'idle',
     states: {
       idle: {
         invoke: {
-          id: 'getWheelColor',
           src: 'getWheelColor',
-          onDone: {
-            actions: 'setWheelColor',
-            target: 'onGround',
-          },
+          id: 'getColor',
+          onDone: [
+            {
+              actions: 'setWheelColor',
+              target: 'On Ground',
+            },
+          ],
+          onError: [
+            {
+              target: 'Error In Color Request',
+            },
+          ],
         },
       },
-      onGround: {
+      'On Ground': {
+        always: {
+          target: 'Done',
+          cond: 'wheelTested',
+        },
         on: {
-          putToTest: {
+          toTest: {
             target: 'onTest',
           },
         },
-        always: {
-          cond: 'spinsCorrectly',
-          target: 'done',
+      },
+      'Error In Color Request': {
+        after: {
+          '500': {
+            target: '#wheelMachine.idle',
+            actions: [],
+            internal: false,
+          },
+        },
+      },
+      Done: {
+        entry: ['updateWheelsCheckedCount', 'setDefaultContext'],
+        on: {
+          requestNewWheel: {
+            target: 'idle',
+          },
         },
       },
       onTest: {
@@ -46,70 +55,93 @@ export const wheelCheckerMachine = createMachine(
         states: {
           stay: {
             on: {
-              startSpinLeft: {
+              spinLeft: {
                 target: 'spinLeft',
               },
-              startSpinRight: {
+              spinRight: {
                 target: 'spinRight',
               },
-              testFinished: {
-                target: '#wheelChecker.onGround',
+              finishTest: {
+                target: '#wheelMachine.On Ground',
+                cond: 'wheelTested',
               },
             },
           },
           spinLeft: {
-            exit: 'leftSpinChecked',
+            exit: 'updateLeftSpinCheck',
             on: {
-              stop: {
+              stopWheel: {
                 target: 'stay',
               },
             },
           },
           spinRight: {
-            exit: 'rightSpinChecked',
+            exit: 'updateRightSpinCheck',
             on: {
-              stop: {
+              stopWheel: {
                 target: 'stay',
               },
             },
           },
         },
       },
-      done: {
-        entry: 'onWheelCheckFinish',
-        on: {
-          requestNewWheel: {
-            target: 'idle',
-          },
-        },
+    },
+    schema: {
+      context: {} as {
+        leftSpinWorks: boolean | null;
+        rightSpinWorks: boolean | null;
+        brokenWheels: number;
+        goodWheels: number;
+        wheelColor: string;
+      },
+      events: {} as
+        | { type: 'toTest' }
+        | { type: 'spinLeft' }
+        | { type: 'spinRight' }
+        | { type: 'stopWheel'; payload: boolean }
+        | { type: 'finishTest' }
+        | { type: 'requestNewWheel' },
+      services: {} as {
+        getWheelColor: {
+          data: string;
+        };
       },
     },
+    tsTypes: {} as import('./machine.typegen').Typegen0,
     context: {
-      ...initialContext,
-      checkedWheels: 0,
+      leftSpinWorks: null,
+      rightSpinWorks: null,
+      brokenWheels: 0,
+      goodWheels: 0,
+      wheelColor: '',
     },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
   },
   {
     actions: {
-      leftSpinChecked: assign((context) => ({
-        ...context,
-        checkedLeftSpin: true,
-      })),
-      rightSpinChecked: assign((context) => ({
-        ...context,
-        checkedRightSpin: true,
-      })),
-      onWheelCheckFinish: assign((context) => ({
-        ...initialContext,
-        checkedWheels: context.checkedWheels + 1,
-      })),
-      setWheelColor: assign((ctx, evt) => ({
+      setWheelColor: assign((_, event) => ({ wheelColor: event.data })),
+      updateLeftSpinCheck: assign((ctx) => ({
         ...ctx,
-        wheelColor: evt.data,
+        leftSpinWorks: Math.random() > 0.1,
+      })),
+      updateRightSpinCheck: assign((ctx) => ({
+        ...ctx,
+        rightSpinWorks: Math.random() > 0.1,
+      })),
+      updateWheelsCheckedCount: assign((ctx) => {
+        const wheelIsBroken = !ctx.leftSpinWorks || !ctx.rightSpinWorks;
+        if (wheelIsBroken) return { brokenWheels: ctx.brokenWheels + 1 };
+        return { goodWheels: ctx.goodWheels + 1 };
+      }),
+      setDefaultContext: assign((_) => ({
+        leftSpinWorks: null,
+        rightSpinWorks: null,
+        wheelColor: '',
       })),
     },
     guards: {
-      spinsCorrectly: (context) => context.checkedLeftSpin && context.checkedRightSpin,
+      wheelTested: (ctx) => ctx.leftSpinWorks !== null && ctx.rightSpinWorks !== undefined,
     },
   },
 );

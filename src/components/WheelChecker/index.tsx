@@ -9,14 +9,6 @@ const getRandomPromisedColor = (): Promise<string> => {
   );
 };
 
-const OnTestControls = () => {
-  return (
-    <div>
-      <button>ttt</button>
-    </div>
-  );
-};
-
 const WheelChecker = () => {
   const [state, send] = useMachine(wheelCheckerMachine, {
     services: {
@@ -25,47 +17,67 @@ const WheelChecker = () => {
   });
   return (
     <div>
-      <h2>Wheels checked {state.context.checkedWheels}</h2>
-      {JSON.stringify(state.value)}
-      <br />
       {JSON.stringify(state.context)}
-      <br />
-      {state.matches('idle') && <div>Waiting for wheel</div>}
-      {state.matches('onGround') && <button onClick={() => send('putToTest')}>Put to test</button>}
+      <div>
+        <h2>Stats</h2>
+        <p>Good wheels: {state.context.goodWheels}</p>
+        <p>Broken wheels: {state.context.brokenWheels}</p>
+        <p>Currently working on {state.context.wheelColor} wheel</p>
+      </div>
+      {state.matches('Error In Color Request') && <div>Retrying</div>}
+      {state.matches('idle') && <div>Awaiting for wheel</div>}
+      {state.matches('On Ground') && (
+        <>
+          <div>On the ground</div>
+          <button onClick={() => send('toTest')}>Start tests</button>
+        </>
+      )}
       {state.matches('onTest') && (
         <div>
-          <button disabled={!state.nextEvents.includes('stop')} onClick={() => send('stop')}>
-            Stop
-          </button>
+          On Test
           <button
-            disabled={!state.nextEvents.includes('startSpinRight')}
             onClick={() => {
-              send('startSpinRight');
+              send('spinLeft');
             }}
-          >
-            Spin Right
-          </button>
-          <button
-            disabled={!state.nextEvents.includes('startSpinLeft')}
-            onClick={() => {
-              send('startSpinLeft');
-            }}
+            disabled={!state.nextEvents.includes('spinLeft')}
           >
             Spin Left
           </button>
           <button
-            disabled={!state.nextEvents.includes('testFinished')}
             onClick={() => {
-              send('testFinished');
+              send('stopWheel');
             }}
+            disabled={!state.nextEvents.includes('stopWheel')}
           >
-            Finish Test
+            Stop
+          </button>
+          <button
+            onClick={() => {
+              send('spinRight');
+            }}
+            disabled={!state.nextEvents.includes('spinRight')}
+          >
+            Spin Right
+          </button>
+          <button
+            onClick={() => {
+              send('finishTest');
+            }}
+            disabled={!state.nextEvents.includes('finishTest')}
+          >
+            End test
           </button>
         </div>
       )}
-      {state.matches('done') && (
+      {state.matches('Done') && (
         <div>
-          <button onClick={() => send('requestNewWheel')}>New wheel</button>
+          <button
+            onClick={() => {
+              send('requestNewWheel');
+            }}
+          >
+            Next wheel
+          </button>
         </div>
       )}
     </div>

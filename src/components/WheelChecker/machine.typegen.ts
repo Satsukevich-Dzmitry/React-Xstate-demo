@@ -4,17 +4,20 @@ export interface Typegen0 {
   '@@xstate/typegen': true;
   internalEvents: {
     '': { type: '' };
-    'done.invoke.getWheelColor': {
-      type: 'done.invoke.getWheelColor';
+    'done.invoke.getColor': {
+      type: 'done.invoke.getColor';
       data: unknown;
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
-    'error.platform.getWheelColor': { type: 'error.platform.getWheelColor'; data: unknown };
+    'error.platform.getColor': { type: 'error.platform.getColor'; data: unknown };
+    'xstate.after(500)#wheelMachine.Error In Color Request': {
+      type: 'xstate.after(500)#wheelMachine.Error In Color Request';
+    };
     'xstate.init': { type: 'xstate.init' };
     'xstate.stop': { type: 'xstate.stop' };
   };
   invokeSrcNameMap: {
-    getWheelColor: 'done.invoke.getWheelColor';
+    getWheelColor: 'done.invoke.getColor';
   };
   missingImplementations: {
     actions: never;
@@ -23,22 +26,27 @@ export interface Typegen0 {
     services: 'getWheelColor';
   };
   eventsCausingActions: {
-    leftSpinChecked: 'stop' | 'xstate.stop';
-    onWheelCheckFinish: '';
-    rightSpinChecked: 'stop' | 'xstate.stop';
-    setWheelColor: 'done.invoke.getWheelColor';
+    setDefaultContext: '';
+    setWheelColor: 'done.invoke.getColor';
+    updateLeftSpinCheck: 'stopWheel' | 'xstate.stop';
+    updateRightSpinCheck: 'stopWheel' | 'xstate.stop';
+    updateWheelsCheckedCount: '';
   };
   eventsCausingDelays: {};
   eventsCausingGuards: {
-    spinsCorrectly: '';
+    wheelTested: '' | 'finishTest';
   };
   eventsCausingServices: {
-    getWheelColor: 'requestNewWheel' | 'xstate.init';
+    getWheelColor:
+      | 'requestNewWheel'
+      | 'xstate.after(500)#wheelMachine.Error In Color Request'
+      | 'xstate.init';
   };
   matchesStates:
-    | 'done'
+    | 'Done'
+    | 'Error In Color Request'
+    | 'On Ground'
     | 'idle'
-    | 'onGround'
     | 'onTest'
     | 'onTest.spinLeft'
     | 'onTest.spinRight'
