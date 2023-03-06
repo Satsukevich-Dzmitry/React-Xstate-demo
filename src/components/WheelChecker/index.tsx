@@ -69,6 +69,7 @@ const WheelChecker = () => {
 
   return (
     <div className='scene'>
+      {JSON.stringify(state.context)}
       <Wheel {...wheelProps} />
       <Statistics {...state.context} />
       <div>
@@ -93,7 +94,7 @@ const WheelChecker = () => {
             </button>
             <button
               onClick={() => {
-                send('stopWheel');
+                send({ type: 'stopWheel', result: Math.random() > 0.1 });
               }}
               disabled={!state.nextEvents.includes('stopWheel')}
             >

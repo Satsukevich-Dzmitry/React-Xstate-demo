@@ -71,17 +71,19 @@ export const wheelCheckerMachine = createMachine(
             },
           },
           spinLeft: {
-            exit: 'updateLeftSpinCheck',
+            // exit: 'updateLeftSpinCheck',
             on: {
               stopWheel: {
                 target: 'stay',
+                actions: 'updateLeftSpinCheck',
               },
             },
           },
           spinRight: {
-            exit: 'updateRightSpinCheck',
+            // exit: 'updateRightSpinCheck',
             on: {
               stopWheel: {
+                actions: 'updateRightSpinCheck',
                 target: 'stay',
               },
             },
@@ -101,7 +103,7 @@ export const wheelCheckerMachine = createMachine(
         | { type: 'toTest' }
         | { type: 'spinLeft' }
         | { type: 'spinRight' }
-        | { type: 'stopWheel' }
+        | { type: 'stopWheel'; result: boolean }
         | { type: 'finishTest' }
         | { type: 'requestNewWheel'; message: string },
       services: {} as {
@@ -124,13 +126,13 @@ export const wheelCheckerMachine = createMachine(
   {
     actions: {
       setWheelColor: assign((_, event) => ({ wheelColor: event.data })),
-      updateLeftSpinCheck: assign((ctx) => ({
+      updateLeftSpinCheck: assign((ctx, { result }) => ({
         ...ctx,
-        leftSpinWorks: Math.random() > 0.1,
+        leftSpinWorks: result,
       })),
-      updateRightSpinCheck: assign((ctx) => ({
+      updateRightSpinCheck: assign((ctx, { result }) => ({
         ...ctx,
-        rightSpinWorks: Math.random() > 0.1,
+        rightSpinWorks: result,
       })),
       updateWheelsCheckedCount: assign((ctx) => {
         const wheelIsBroken = !ctx.leftSpinWorks || !ctx.rightSpinWorks;

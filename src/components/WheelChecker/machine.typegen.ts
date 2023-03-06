@@ -14,7 +14,6 @@ export interface Typegen0 {
       type: 'xstate.after(500)#wheelMachine.Error In Color Request';
     };
     'xstate.init': { type: 'xstate.init' };
-    'xstate.stop': { type: 'xstate.stop' };
   };
   invokeSrcNameMap: {
     getWheelColor: 'done.invoke.getColor';
@@ -29,8 +28,8 @@ export interface Typegen0 {
     setDefaultContext: '';
     setWheelColor: 'done.invoke.getColor';
     thankForTest: 'requestNewWheel';
-    updateLeftSpinCheck: 'stopWheel' | 'xstate.stop';
-    updateRightSpinCheck: 'stopWheel' | 'xstate.stop';
+    updateLeftSpinCheck: 'stopWheel';
+    updateRightSpinCheck: 'stopWheel';
     updateWheelsCheckedCount: '';
   };
   eventsCausingDelays: {};
