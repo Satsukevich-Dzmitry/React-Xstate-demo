@@ -52,5 +52,5 @@ export interface Typegen0 {
     | 'onTest.spinRight'
     | 'onTest.stay'
     | { onTest?: 'spinLeft' | 'spinRight' | 'stay' };
-  tags: never;
+  tags: 'noWheel';
 }

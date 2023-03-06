@@ -6,6 +6,7 @@ export const wheelCheckerMachine = createMachine(
     initial: 'idle',
     states: {
       idle: {
+        tags: ['noWheel'],
         invoke: {
           src: 'getWheelColor',
           id: 'getColor',
@@ -34,6 +35,7 @@ export const wheelCheckerMachine = createMachine(
         },
       },
       'Error In Color Request': {
+        tags: ['noWheel'],
         after: {
           '500': {
             target: '#wheelMachine.idle',
@@ -98,7 +100,7 @@ export const wheelCheckerMachine = createMachine(
         | { type: 'toTest' }
         | { type: 'spinLeft' }
         | { type: 'spinRight' }
-        | { type: 'stopWheel'; payload: boolean }
+        | { type: 'stopWheel' }
         | { type: 'finishTest' }
         | { type: 'requestNewWheel' },
       services: {} as {
@@ -137,11 +139,10 @@ export const wheelCheckerMachine = createMachine(
       setDefaultContext: assign((_) => ({
         leftSpinWorks: null,
         rightSpinWorks: null,
-        wheelColor: '',
       })),
     },
     guards: {
-      wheelTested: (ctx) => ctx.leftSpinWorks !== null && ctx.rightSpinWorks !== undefined,
+      wheelTested: (ctx) => ctx.leftSpinWorks !== null && ctx.rightSpinWorks !== null,
     },
   },
 );

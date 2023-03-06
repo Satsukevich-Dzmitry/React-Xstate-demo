@@ -1,7 +1,11 @@
 import WheelChecker from '~/components/WheelChecker';
 
 function App() {
-  return <WheelChecker />;
+  return (
+    <div>
+      <WheelChecker />
+    </div>
+  );
 }
 
 export default App;
