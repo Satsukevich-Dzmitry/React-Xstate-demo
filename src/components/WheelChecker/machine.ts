@@ -49,6 +49,7 @@ export const wheelCheckerMachine = createMachine(
         on: {
           requestNewWheel: {
             target: 'idle',
+            actions: 'thankForTest',
           },
         },
       },
@@ -102,7 +103,7 @@ export const wheelCheckerMachine = createMachine(
         | { type: 'spinRight' }
         | { type: 'stopWheel' }
         | { type: 'finishTest' }
-        | { type: 'requestNewWheel' },
+        | { type: 'requestNewWheel'; message: string },
       services: {} as {
         getWheelColor: {
           data: string;
@@ -140,6 +141,9 @@ export const wheelCheckerMachine = createMachine(
         leftSpinWorks: null,
         rightSpinWorks: null,
       })),
+      thankForTest: (_, { message }) => {
+        alert(message);
+      },
     },
     guards: {
       wheelTested: (ctx) => ctx.leftSpinWorks !== null && ctx.rightSpinWorks !== null,

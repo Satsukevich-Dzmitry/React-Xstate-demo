@@ -121,7 +121,7 @@ const WheelChecker = () => {
           <div>
             <button
               onClick={() => {
-                send('requestNewWheel');
+                send({ type: 'requestNewWheel', message: 'Good work. Keep this pace' });
               }}
             >
               Next wheel

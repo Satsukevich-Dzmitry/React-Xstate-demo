@@ -28,6 +28,7 @@ export interface Typegen0 {
   eventsCausingActions: {
     setDefaultContext: '';
     setWheelColor: 'done.invoke.getColor';
+    thankForTest: 'requestNewWheel';
     updateLeftSpinCheck: 'stopWheel' | 'xstate.stop';
     updateRightSpinCheck: 'stopWheel' | 'xstate.stop';
     updateWheelsCheckedCount: '';
