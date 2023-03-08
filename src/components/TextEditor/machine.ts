@@ -88,9 +88,9 @@ export const textEditorMachine = createMachine(
       },
       ErrorInRequest: {
         after: {
-          '5000': {
+          IncrementalRetry: {
             target: '#TextEditor.Done',
-            actions: [],
+            actions: ['incrementRetryCount'],
             internal: false,
           },
         },
@@ -105,6 +105,7 @@ export const textEditorMachine = createMachine(
       context: {} as {
         text: string;
         error: string | null;
+        retries: number;
       },
       events: {} as
         | { type: 'StartCreation' }
@@ -114,7 +115,7 @@ export const textEditorMachine = createMachine(
         | { type: 'KeyPressed'; payload: string }
         | { type: 'ErrorHappens' },
     },
-    context: { text: '', error: null },
+    context: { text: '', error: null, retries: 0 },
     predictableActionArguments: true,
     preserveActionOrder: true,
     tsTypes: {} as import('./machine.typegen').Typegen0,
@@ -122,9 +123,13 @@ export const textEditorMachine = createMachine(
   {
     actions: {
       UpdateText: assign((_, { payload }) => ({ text: payload })),
+      incrementRetryCount: assign((ctx) => ({ retries: ctx.retries + 1 })),
     },
     guards: {
       'Length>=100 && Length<=800': ({ text }) => text.length >= 100 && text.length <= 800,
+    },
+    delays: {
+      IncrementalRetry: (ctx) => 500 + ctx.retries * 500,
     },
   },
 );

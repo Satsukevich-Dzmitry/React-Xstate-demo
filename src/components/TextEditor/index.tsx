@@ -1,5 +1,7 @@
 import { useMachine } from '@xstate/react';
 import { textEditorMachine } from './machine';
+import './index.css';
+import classNames from 'classnames';
 
 const pretendThatWeSendTextToServer = async (): Promise<{ message: string }> => {
   return await new Promise((resolve, reject) =>
@@ -20,9 +22,7 @@ export const TextEditor = () => {
   });
 
   return (
-    <div>
-      {JSON.stringify(state.value)}
-      {JSON.stringify(state.context)}
+    <div className='editor'>
       {state.matches('idle') && (
         <button
           onClick={() => {
@@ -34,11 +34,9 @@ export const TextEditor = () => {
       )}
       {state.matches('Creating') && (
         <form
-          style={{
-            border: state.matches('Creating.Error.ErrorCatched')
-              ? '1px solid red'
-              : '1px solid black',
-          }}
+          className={classNames('create-form', {
+            'create-form__error': state.matches('Creating.Error.ErrorCatched'),
+          })}
           onSubmit={(e) => {
             e.preventDefault();
             send('CreationDone');
@@ -52,16 +50,22 @@ export const TextEditor = () => {
                   send({ type: 'KeyPressed', payload: e.target.value });
                 }}
               ></textarea>
-              <button onClick={() => send({ type: 'SwitchToPreview' })}>Preview</button>
             </div>
           )}
           {state.matches('Creating.EDIT.Preview') && (
-            <div>
+            <div className='preview'>
               <p>{state.context.text}</p>
-              <button onClick={() => send({ type: 'SwitchToEditing' })}>Edit</button>
             </div>
           )}
-          <button type='submit'>Send text</button>
+          <div className='controls'>
+            {state.nextEvents.includes('SwitchToEditing') && (
+              <button onClick={() => send({ type: 'SwitchToEditing' })}>Edit</button>
+            )}
+            {state.nextEvents.includes('SwitchToPreview') && (
+              <button onClick={() => send({ type: 'SwitchToPreview' })}>Preview</button>
+            )}
+            <button type='submit'>Send text</button>
+          </div>
         </form>
       )}
       {state.matches('Done') && <h2>Sending to server</h2>}
@@ -69,7 +73,7 @@ export const TextEditor = () => {
       {state.matches('ErrorInRequest') && (
         <h2>
           Error in request <strong>Message: </strong>
-          {state.context.error}. Retrying
+          {state.context.error}. Retrying for the {state.context.retries} time
         </h2>
       )}
     </div>

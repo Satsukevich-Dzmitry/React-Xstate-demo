@@ -9,8 +9,8 @@ export interface Typegen0 {
       __tip: 'See the XState TS docs to learn how to strongly type this.';
     };
     'error.platform.SendToServer': { type: 'error.platform.SendToServer'; data: unknown };
-    'xstate.after(5000)#TextEditor.ErrorInRequest': {
-      type: 'xstate.after(5000)#TextEditor.ErrorInRequest';
+    'xstate.after(IncrementalRetry)#TextEditor.ErrorInRequest': {
+      type: 'xstate.after(IncrementalRetry)#TextEditor.ErrorInRequest';
     };
     'xstate.init': { type: 'xstate.init' };
   };
@@ -25,13 +25,16 @@ export interface Typegen0 {
   };
   eventsCausingActions: {
     UpdateText: 'KeyPressed';
+    incrementRetryCount: 'xstate.after(IncrementalRetry)#TextEditor.ErrorInRequest';
   };
-  eventsCausingDelays: {};
+  eventsCausingDelays: {
+    IncrementalRetry: 'error.platform.SendToServer';
+  };
   eventsCausingGuards: {
     'Length>=100 && Length<=800': 'CreationDone';
   };
   eventsCausingServices: {
-    SendToServer: 'CreationDone' | 'xstate.after(5000)#TextEditor.ErrorInRequest';
+    SendToServer: 'CreationDone' | 'xstate.after(IncrementalRetry)#TextEditor.ErrorInRequest';
   };
   matchesStates:
     | 'Creating'

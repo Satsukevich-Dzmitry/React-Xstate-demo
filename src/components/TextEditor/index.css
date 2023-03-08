@@ -1,0 +1,50 @@
+.editor {
+  margin: 0 auto;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 0;
+}
+.create-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid black;
+}
+
+.create-form__error {
+  position: relative;
+  border: 1px solid red;
+}
+
+.create-form textarea {
+  resize: none;
+  width: 800px;
+  height: 200px;
+  overflow-y: scroll;
+  border: none;
+  background-color: antiquewhite;
+}
+
+.preview {
+  width: 800px;
+  background-color: antiquewhite;
+  padding: 5px 10px;
+}
+
+.preview p {
+  padding: 0;
+  max-width: 800px;
+  text-align: left;
+  word-break: break-word;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 10px 0;
+}
