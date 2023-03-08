@@ -44,6 +44,7 @@ export interface Typegen0 {
     | 'Creating.ERROR'
     | 'Creating.ERROR.ErrorCatched'
     | 'Creating.ERROR.NoError'
+    | 'DecideWhatIsInitialState'
     | 'Done'
     | 'ErrorInRequest'
     | 'Finish'

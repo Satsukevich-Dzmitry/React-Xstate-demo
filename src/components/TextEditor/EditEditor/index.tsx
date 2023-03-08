@@ -16,14 +16,12 @@ const pretendThatWeSendTextToServer = async (): Promise<{ message: string }> => 
 };
 
 const useEditMachine = (text: string) => {
-  const [state, send, service] = useMachine(textEditorMachine, {
-    context: { text },
+  const [state, send] = useMachine(textEditorMachine, {
+    context: { text, isCreating: false },
     services: {
       SendToServer: pretendThatWeSendTextToServer,
     },
   });
-
-  service.send('StartCreation');
 
   return [state, send] as const;
 };
