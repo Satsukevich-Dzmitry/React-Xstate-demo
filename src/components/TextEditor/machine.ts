@@ -106,7 +106,6 @@ export const textEditorMachine = createMachine(
         text: string;
         error: string | null;
         retries: number;
-        isCreating: boolean;
       },
       events: {} as
         | { type: 'StartCreation' }
@@ -117,7 +116,7 @@ export const textEditorMachine = createMachine(
         | { type: 'ErrorHappens' },
     },
     tsTypes: {} as import('./machine.typegen').Typegen0,
-    context: { text: '', error: null, retries: 0, isCreating: true },
+    context: { text: '', error: null, retries: 0 },
     predictableActionArguments: true,
     preserveActionOrder: true,
   },
