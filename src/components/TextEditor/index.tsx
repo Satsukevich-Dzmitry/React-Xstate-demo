@@ -35,7 +35,7 @@ export const TextEditor = () => {
       {state.matches('Creating') && (
         <form
           className={classNames('create-form', {
-            'create-form__error': state.matches('Creating.Error.ErrorCatched'),
+            'create-form__error': state.matches('Creating.ERROR.ErrorCatched'),
           })}
           onSubmit={(e) => {
             e.preventDefault();
@@ -69,7 +69,7 @@ export const TextEditor = () => {
         </form>
       )}
       {state.matches('Done') && <h2>Sending to server</h2>}
-      {state.matches('Finish') && <h2>Post created</h2>}
+      {state.done && <h2>Post created</h2>}
       {state.matches('ErrorInRequest') && (
         <h2>
           Error in request <strong>Message: </strong>

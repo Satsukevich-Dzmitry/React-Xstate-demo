@@ -14,8 +14,9 @@ export const textEditorMachine = createMachine(
         },
       },
       Creating: {
+        type: 'parallel',
         states: {
-          Error: {
+          ERROR: {
             initial: 'NoError',
             states: {
               NoError: {
@@ -58,12 +59,11 @@ export const textEditorMachine = createMachine(
               cond: 'Length>=100 && Length<=800',
             },
             {
-              target: '.Error.ErrorCatched',
+              target: ['.ERROR.ErrorCatched', '.EDIT.Editing'],
               internal: false,
             },
           ],
         },
-        type: 'parallel',
       },
       Done: {
         invoke: {

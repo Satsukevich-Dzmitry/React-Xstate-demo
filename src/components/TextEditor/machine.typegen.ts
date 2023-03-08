@@ -41,9 +41,9 @@ export interface Typegen0 {
     | 'Creating.EDIT'
     | 'Creating.EDIT.Editing'
     | 'Creating.EDIT.Preview'
-    | 'Creating.Error'
-    | 'Creating.Error.ErrorCatched'
-    | 'Creating.Error.NoError'
+    | 'Creating.ERROR'
+    | 'Creating.ERROR.ErrorCatched'
+    | 'Creating.ERROR.NoError'
     | 'Done'
     | 'ErrorInRequest'
     | 'Finish'
@@ -51,8 +51,8 @@ export interface Typegen0 {
     | {
         Creating?:
           | 'EDIT'
-          | 'Error'
-          | { EDIT?: 'Editing' | 'Preview'; Error?: 'ErrorCatched' | 'NoError' };
+          | 'ERROR'
+          | { EDIT?: 'Editing' | 'Preview'; ERROR?: 'ErrorCatched' | 'NoError' };
       };
   tags: never;
 }
