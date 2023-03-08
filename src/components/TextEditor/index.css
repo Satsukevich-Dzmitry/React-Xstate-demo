@@ -48,3 +48,13 @@
   gap: 5px;
   margin: 10px 0;
 }
+
+.post {
+  background-color: antiquewhite;
+  margin: 0 auto;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}

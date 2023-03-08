@@ -1,12 +1,11 @@
-// import WheelChecker from '~/components/WheelChecker';
-
 import { TextEditor } from './components/TextEditor';
+import { EditEditor } from './components/TextEditor/EditEditor';
 
 function App() {
   return (
     <div>
       <TextEditor />
-      {/* <WheelChecker /> */}
+      <EditEditor text='Edit me please' />
     </div>
   );
 }
