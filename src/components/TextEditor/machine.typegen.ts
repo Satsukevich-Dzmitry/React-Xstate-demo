@@ -3,6 +3,7 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   internalEvents: {
+    '': { type: '' };
     'done.invoke.SendToServer': {
       type: 'done.invoke.SendToServer';
       data: unknown;
@@ -32,6 +33,7 @@ export interface Typegen0 {
   };
   eventsCausingGuards: {
     'Length>=100 && Length<=800': 'CreationDone';
+    isExistingPost: '';
   };
   eventsCausingServices: {
     SendToServer: 'CreationDone' | 'xstate.after(IncrementalRetry)#TextEditor.ErrorInRequest';
