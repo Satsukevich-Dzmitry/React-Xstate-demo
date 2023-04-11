@@ -31,7 +31,8 @@ export const EditEditor = ({ text }: { text: string }) => {
   const [state, send] = useEditMachine(text);
 
   return (
-    <>
+    <div>
+      <h2>EditPost</h2>
       {!isEditing && (
         <div className='post'>
           <p>{text}</p>
@@ -92,6 +93,6 @@ export const EditEditor = ({ text }: { text: string }) => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
