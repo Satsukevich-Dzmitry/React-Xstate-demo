@@ -68,20 +68,3 @@ export const Page = createMachine({
     },
   },
 });
-
-// function App() {
-// 	const [state, send] = useMachine(Page);
-// 	return (
-// 	  <div>
-// 		{JSON.stringify(state)}
-// 		<button
-// 		  onClick={() => {
-// 			send('LOADED');
-// 		  }}
-// 		>
-// 		  Send
-// 		</button>
-// 		{/* <WheelChecker /> */}
-// 	  </div>
-// 	);
-//   }

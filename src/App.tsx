@@ -1,11 +1,11 @@
 import { TextEditor } from './components/TextEditor';
-// import { EditEditor } from './components/TextEditor/EditEditor';
+import { EditEditor } from './components/TextEditor/EditEditor';
 
 function App() {
   return (
     <div>
       <TextEditor />
-      {/* <EditEditor text='Edit me please' /> */}
+      <EditEditor text='Edit me please' />
     </div>
   );
 }

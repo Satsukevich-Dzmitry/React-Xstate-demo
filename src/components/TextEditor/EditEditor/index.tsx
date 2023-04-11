@@ -17,7 +17,7 @@ const pretendThatWeSendTextToServer = async (): Promise<{ message: string }> => 
 
 const useEditMachine = (text: string) => {
   const [state, send] = useMachine(textEditorMachine, {
-    context: { text, isCreating: false },
+    context: { text },
     services: {
       SendToServer: pretendThatWeSendTextToServer,
     },

@@ -12,6 +12,10 @@ export const textEditorMachine = createMachine(
             target: 'Creating',
           },
         },
+        always: {
+          target: 'Creating',
+          cond: (ctx) => ctx.text.length > 0,
+        },
       },
       Creating: {
         type: 'parallel',
