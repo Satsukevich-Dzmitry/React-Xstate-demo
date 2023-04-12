@@ -32,7 +32,7 @@ export interface Typegen0 {
     IncrementalRetry: 'error.platform.SendToServer';
   };
   eventsCausingGuards: {
-    'Length>=100 && Length<=800': 'CreationDone';
+    'Length>=100 && Length<=800': '' | 'CreationDone';
     isExistingPost: '';
   };
   eventsCausingServices: {

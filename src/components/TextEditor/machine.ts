@@ -30,7 +30,12 @@ export const textEditorMachine = createMachine(
                   },
                 },
               },
-              ErrorCatched: {},
+              ErrorCatched: {
+                always: {
+                  cond: 'Length>=100 && Length<=800',
+                  target: 'NoError',
+                },
+              },
             },
           },
           EDIT: {
