@@ -23,13 +23,7 @@ export const textEditorMachine = createMachine(
           ERROR: {
             initial: 'NoError',
             states: {
-              NoError: {
-                on: {
-                  ErrorHappens: {
-                    target: 'ErrorCatched',
-                  },
-                },
-              },
+              NoError: {},
               ErrorCatched: {
                 always: {
                   cond: 'Length>=100 && Length<=800',
