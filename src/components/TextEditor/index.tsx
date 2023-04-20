@@ -35,40 +35,47 @@ export const TextEditor = () => {
           </button>
         )}
         {state.matches('Creating') && (
-          <form
-            className={classNames('create-form', {
-              'create-form__error': state.matches('Creating.ERROR.ErrorCatched'),
-            })}
-            onSubmit={(e) => {
-              e.preventDefault();
-              send('CreationDone');
-            }}
-          >
-            {state.matches('Creating.EDIT.Editing') && (
-              <div>
-                <textarea
-                  value={state.context.text}
-                  onChange={(e) => {
-                    send({ type: 'KeyPressed', payload: e.target.value });
-                  }}
-                ></textarea>
-              </div>
-            )}
-            {state.matches('Creating.EDIT.Preview') && (
-              <div className='preview'>
-                <p>{state.context.text}</p>
-              </div>
-            )}
-            <div className='controls'>
-              {state.nextEvents.includes('SwitchToEditing') && (
-                <button onClick={() => send({ type: 'SwitchToEditing' })}>Edit</button>
+          <>
+            <form
+              className={classNames('create-form', {
+                'create-form__error': state.matches('Creating.ERROR.ErrorCatched'),
+              })}
+              onSubmit={(e) => {
+                e.preventDefault();
+                send('CreationDone');
+              }}
+            >
+              {state.matches('Creating.EDIT.Editing') && (
+                <div>
+                  <textarea
+                    value={state.context.text}
+                    onChange={(e) => {
+                      send({ type: 'KeyPressed', payload: e.target.value });
+                    }}
+                  ></textarea>
+                </div>
               )}
-              {state.nextEvents.includes('SwitchToPreview') && (
-                <button onClick={() => send({ type: 'SwitchToPreview' })}>Preview</button>
+              {state.matches('Creating.EDIT.Preview') && (
+                <div className='preview'>
+                  <p>{state.context.text}</p>
+                </div>
               )}
-              <button type='submit'>Send text</button>
-            </div>
-          </form>
+              <div className='controls'>
+                {state.nextEvents.includes('SwitchToEditing') && (
+                  <button onClick={() => send({ type: 'SwitchToEditing' })}>Edit</button>
+                )}
+                {state.nextEvents.includes('SwitchToPreview') && (
+                  <button onClick={() => send({ type: 'SwitchToPreview' })}>Preview</button>
+                )}
+                <button type='submit'>Send text</button>
+              </div>
+            </form>
+            {state.matches('Creating.ERROR.ErrorCatched') && (
+              <p className='create-form_label__error'>
+                You text should be longer then 100 symbols and shorter then 800
+              </p>
+            )}
+          </>
         )}
         {state.matches('Done') && <h2>Sending to server</h2>}
         {state.done && <h2>Post created</h2>}
