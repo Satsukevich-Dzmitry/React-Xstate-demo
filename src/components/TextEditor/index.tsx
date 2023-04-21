@@ -35,7 +35,8 @@ export const TextEditor = () => {
           </button>
         )}
         {state.matches('Creating') && (
-          <>
+          <label htmlFor='' className='create-form_label'>
+            Please provide text with more then 100 and less then 800 symbols
             <form
               className={classNames('create-form', {
                 'create-form__error': state.matches('Creating.ERROR.ErrorCatched'),
@@ -75,7 +76,7 @@ export const TextEditor = () => {
                 You text should be longer then 100 symbols and shorter then 800
               </p>
             )}
-          </>
+          </label>
         )}
         {state.matches('Done') && <h2>Sending to server</h2>}
         {state.done && <h2>Post created</h2>}
